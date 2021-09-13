@@ -37,24 +37,42 @@ Par exemple, le code SMT-LIB pour le fichier d'entrée input_1.dat
 
 devrait  être
 
-; définition de l'alphabet A et de l'arbre préfixe T
+ ` ; définition de l'alphabet A et de l'arbre préfixe T
 (declare-datatypes () ((A a b c) (T e ea eab eaba eb eba ebc ec eca)))
-; les états de l'automate à trouver sont {0, 1, ..., n-1}
+; 
+
+les états de l'automate à trouver sont {0, 1, ..., n-1}
+
 (define-sort Q () Int)
+
 (declare-const n Q)
+
 (assert (> n 0))
+
 ; fonction de transition de l'automate
+
 (declare-fun delta (Q A) Q)
+
 (assert (forall ((q Q) (a A))
+
 (and (>= (delta q a) 0) (< (delta q a) n))))
+
 ; ensemble d'états acceptants de l'automate
+
 (declare-fun final (Q) Bool)
+
 ; fonction des éléments de l'arbre préfixe vers les états
+
 (declare-fun f (T) Q)
+
 (assert (forall ((x T))
+
 (and (>= (f x) 0) (< (f x) n))))
+
 ; contrainte (50) sur l'état initial
+
 (assert (= 0 (f e)))
+
 (assert (and 
            (= (f ea)  (delta (f e)  a))
            (= (f eab)  (delta (f ea)  b))
@@ -72,4 +90,4 @@ devrait  être
 (check-sat-using (then qe smt))
 (get-model)
 (exit)
-
+ `
